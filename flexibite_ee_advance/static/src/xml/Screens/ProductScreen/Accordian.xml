@@ -1,0 +1,26 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="Accordian" owl="1">
+        <div>
+            <div class="grid-container" t-att-class="{'active': state.active}" t-on-click="toggleAccordian">
+                <div class="item-left">
+                    <t t-esc="props.warehouse.name"/>
+                </div>
+                <t t-foreach="props.warehouse.Warehouse_total" t-as="total">
+                    <div class="item-right"><t t-esc="total.qty_available"/></div>
+                    <div class="item-right"><t t-esc="total.incoming_qty"/></div>
+                    <div class="item-right"><t t-esc="total.outgoing_qty"/></div>
+                </t>
+                <div class="item-center"><i t-attf-class="{{toggleClass}}"/></div>
+            </div>
+            <div class="location" t-att-class="{'visible': state.active}">
+                <div class="grid-container" t-foreach="props.warehouse.locations" t-as="location">
+                    <div class="item-left"><t t-esc="location.name"/></div>
+                    <div class="item-right"><t t-esc="location.qty_available"/></div>
+                    <div class="item-right"><t t-esc="location.incoming_qty"/></div>
+                    <div class="item-right"><t t-esc="location.outgoing_qty"/></div>
+                    <div class="item-center"></div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

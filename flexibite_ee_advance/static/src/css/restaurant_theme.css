@@ -1,0 +1,455 @@
+.bg {
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  text-shadow: 3px 3px 0px #2c3e50;
+}
+.bg img{
+    width:200px;
+    height: 200px;
+    border-radius: 50%;
+    border:5px solid #fff;
+}
+.pos .product-screen.screen .control-button{
+    width: 200px;
+    height: auto;
+    display: block;
+    background-color: #fff;
+    color:#444;
+    overflow: hidden;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0.46875rem 2.1875rem rgb(90 97 105 / 10%), 0 0.9375rem 1.40625rem rgb(90 97 105 / 10%), 0 0.25rem 0.53125rem rgb(90 97 105 / 12%), 0 0.125rem 0.1875rem rgb(90 97 105 / 10%);
+}
+.numpad{
+    background:#fff;
+    color: #444;
+}
+.pos .numpad button{
+    background:#fff;
+    color: #444;
+}
+.pos .mode-button.selected-mode{
+    background: #002244;
+    color: #fff;
+}
+.pos .actionpad .button.pay{
+    background: #fff;
+    color: #444;
+}
+.pos .actionpad .button.set-customer{
+    background:#fff;
+    color:#444;
+}
+/*.leftpane.pane-border{
+    border-left: 1px solid #ff5050;
+}*/
+/*.menu:hover {
+  width: 220px;
+  color:#4444;
+}*/
+/*.menuitem span {
+  position: absolute;
+  left:50px;
+  top:15px;
+  transition:color 1s;
+  color: #ff5050;
+}*/
+
+/*.menu:hover .menuitem  span {
+    color: rgba(255,255,255,1);
+}*/
+
+.menuitem {
+  position: relative;
+  padding: 15px;
+  transition:border .5s, background .2s;
+}
+.menuitem.text{
+    border-bottom: 1px solid #ff5050;
+    color: #ff5050;
+    font-size:18px;
+}
+.menuitem  span:hover{
+    color: white;
+}
+.menuitem:hover {
+  cursor: pointer;
+  background: #ff5050;
+  color: white;
+}
+.text:hover{
+  background: #ff5050;
+  /* color:#   fff; */
+}
+.pos .leftpane{
+    max-width: 380px;
+}
+/*.pos .green-border-bottom{
+    border-bottom:2px solid #ff5050;
+}*/
+.pos .product-screen.screen .control-button {
+    all: initial;
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #7879a35e;
+}
+.pos .product-screen.screen .control-button:hover {
+    background: #7879a3;
+    color: #FFFF;
+    cursor:pointer;
+}
+.pos .product-screen.screen .control-button:active {
+    all: initial;
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #7879a3;
+}
+.pos .pos-topheader .oe_status:hover {
+    background: #72739f;
+    color: #FFFF;
+}
+.pos .oe_status .oe_green, .pos .oe_icon.oe_green{
+    color: white;
+}
+.pos .pos-topheader .status-buttons > div:hover{
+    color: #FFFF;
+    background: #72739f;
+}
+.ticket-button:hover {
+    background: #72739f;
+    cursor: pointer;
+}
+.cash-move-button:hover {
+    color: white;
+    background: #72739f;
+    cursor: pointer;
+}
+.pos .mode-button.selected-mode:hover{
+    background: #72739f;
+}
+.pos .rightpane-header{
+    background: white;
+}
+.pos .category-list.simple{
+    background: white;
+}
+.pos .category-simple-button{
+    background: white;
+}
+.pos .product .price-tag{
+    background: rgb(86, 86, 86);
+}
+.pos .product .product-info-button{
+    background: rgb(86, 86, 86);
+}
+
+.ticket-button.highlight {
+    background: #72739f;
+}
+.pos .product{
+    border: 1px solid #444;
+}
+.pos .paymentmethods .button{
+    background: #ffffff;
+}
+.pos .payment-screen.screen{
+    background: #ffffff;
+}
+.pos .control-button.highlight, .pos .button.highlight {
+    background: #72739f !important;
+    border: solid 1px #72739f !important;
+}
+.payment-screen .payment-buttons .button{
+    color: #444;
+    background: white;
+}
+.payment-screen .payment-buttons .button:active{
+    background: #72739f;
+}
+.pos .clientlist-screen.screen{
+    background: #ffffff;
+}
+.pos .clientlist-screen .client-list tr {
+    transition: all 150ms linear;
+    background: #ffffff;
+    color: #444;
+}
+/*.pos .clientlist-screen .client-list thead > tr, .pos .clientlist-screen .client-list tr:nth-child(even) {
+    background: rgb(68 68 68);
+    color: white;
+}*/
+.pos .clientlist-screen .client-list tr.highlight {
+    transition: all 150ms linear;
+    background: #72739f !important;
+}
+.pos .clientlist-screen .client-list thead > tr{
+    background: #72739f;
+    color: #FFFF;
+}
+.screen .top-content .button{
+    background: #FFFF;
+    color: #444;
+}
+.payment-status-container .amount.highlight {
+    font-weight: bold;
+    color: #f04b4e;
+}
+.pos .control-button span{
+    white-space: nowrap;
+}
+.side-bar{
+    width: 61px;
+}
+.wrapper{
+    line-height: 4;
+    color: #FFFF;
+    border-right: 1px solid #002244;
+    width: 62px;
+    text-align: center;
+}
+.menu, .menu-bar {
+    position: fixed;
+    top: 48;
+    left: 0;
+    height: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background: #f7f7f7;
+    z-index:10;
+    overflow:hidden;
+    cursor:pointer;
+    box-shadow: 2px 0 18px rgba(0, 0, 0, 0.26);
+}
+.money_src{
+    height:20px;
+    width:20px;
+}
+.menu li span{
+  display: block;
+  /*text-indent: -500em;*/
+    height: 45px;
+    width: 60px;
+    font-size: 20px;
+    line-height: 45px;
+    text-align: center;
+    color: #72739f;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background 0.1s ease-in-out;
+}
+.menu li span:before {
+    font-family: FontAwesome;
+    speak: none;
+    text-indent: 0em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 1.4em;
+}
+.menu li span:hover{
+    background: #72739f;
+    color: #FFFF;
+}
+.menu-bar{
+    overflow:hidden;
+    left:5em;
+    z-index:5;
+    width:0;
+    height:0;
+}
+.menu-bar li span{
+  display: block;
+  height: 4em;
+  line-height: 4em;
+  text-align:center;
+  color: #72739f;
+  text-decoration:none;
+  position: relative;
+  font-family:verdana;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.menu-bar li:first-child aapn{
+    height:5em;
+    background: #267fdd;
+    color: #fff;
+    line-height:5
+}
+.para{
+    color:#033f72;
+    padding-left:100px;
+    font-size:3em;
+    margin-bottom:20px;
+}
+.open{
+    width:14em;
+    height:100%;
+}
+.payment-screen .paymentlines-empty .total{
+    color:#222a62;
+}
+.header-tab-buttons{
+    margin: -20px;
+}
+/*Product History*/
+.sticky-header-history{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: #f0eeee;
+    padding: 15px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+/*.purchase-history{
+    padding-bottom: 20px;
+    font-size: 14px;
+}*/
+.history-info{
+    display: flex;
+    flex-direction: column;
+}
+.history-info-item{
+    flex-basis: 100%;
+    text-align: left;
+    padding-bottom: 5px;
+}
+.product-history-row-main{
+    display: flex;
+}
+.product-history-row-item{
+    flex-basis: 100%;
+    text-align: left;
+    padding-bottom: 7px;
+    padding-left: 15px;
+    font-size: 14px;
+}
+.flex-1{
+    flex:1;
+    text-align: right;
+    padding-right: 10px;
+}
+.flex-2{
+    flex:3;
+}
+.opacity_0_7{
+    opacity: 0.7;
+}
+.no_pop_up {
+    text-align: center;
+    padding: 100px;
+}
+.purchase-history-main{
+    display: flex;
+    height: 60px;
+}
+.purchase-history-item{
+    flex-basis: 100%;
+    text-align: left;
+    padding: 10px 0 5px 15px;
+    font-size: 14px;
+}
+.product-info-line{
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/*Purchase History Popup*/
+.main-div {
+    display: flex;
+    width:100%;
+    font-size: 14px;
+    line-height:3;
+}
+.left-side{
+    display: flex;
+    width:80%;
+    text-align: left;
+}
+.right-side{
+    width:20%;
+    display: flex;
+    text-align: right;
+    justify-content: space-around;
+}
+.header-tab{
+    padding-left: 10px;
+    color: #aaa9a9;
+    width: 40%;
+    background-color: white;
+}
+.header-tab.active{
+    color: var(--theme-text-color);
+    background: var(--theme-active-color);
+    border-right: 1px solid var(--theme-main-color);
+}
+
+.header-print-button{
+    width: 25px;
+    height: 25px;
+    margin-right: 9px;
+    border: 0px;
+    overflow: hidden;
+    font-size: 21px;
+    padding-top: 0;
+    float: right;
+    margin-top: -12px;
+    border-radius: 71px;
+}
+.header-cancel-button{
+    width: 20px;
+    height: 20px;
+    border: 0px;
+    overflow: hidden;
+    font-size: 17px;
+    padding-top: 0;
+    float: right;
+    margin-top: -12px;
+    border-radius: 71px;
+    background-color: #875a7b;
+    color: white;
+}
+.header-cancel-button-custom{
+    width: 40px;
+    font-size: 17px;
+    padding-top: 0;
+    float: right;
+    margin-top: -20px;
+    margin-right: -20px;
+    background-color: #72739f;
+    cursor: pointer;
+    color: white;
+    line-height: 2.4;
+}
+.header-cancel-button-custom i:hover{
+    color: #002244;
+}
+.header-cancel-button:active{
+    width: 20px;
+    height: 20px;
+    border: 1px solid #aaa9a9;
+    overflow: hidden;
+    font-size: 17px;
+    padding-top: 0;
+    float: right;
+    margin-top: -12px;
+    border-radius: 71px;
+    color: #aaa9a9;
+    background-color: white;
+}
+.wrapper:hover{
+    color: #72739f;
+    cursor: pointer;
+}
+.popup.popup-number.popup-password .title{
+    margin-bottom: 20px;
+}
+.pos .popup.popup-password{
+    height: 455px;
+}

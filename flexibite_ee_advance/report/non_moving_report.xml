@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="non_moving_stock_report" model="ir.actions.report">
+            <field name="name">Non Moving Stock</field>
+            <field name="model">non.moving.stock</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flexibite_ee_advance.non_moving_stock_template</field>
+            <field name="report_file">flexibite_ee_advance.non_moving_stock_template</field>
+        </record>
+
+    </data>
+</odoo>

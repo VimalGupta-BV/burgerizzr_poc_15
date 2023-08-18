@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PopupProductLines" owl="1">
+           <t t-if="props.line.qty > 0">
+               <tr t-att-id="props.line.id" class="product_line">
+                   <td style="width:50%;"><t t-esc="props.line.product_id[1] or '-'"/></td>
+                   <td style="width:20%;"><t t-esc="env.pos.format_currency(props.line.price_unit) or env.pos.format_currency(0)"/></td>
+                   <td style="width:25%;">
+                       <span class="minus">
+                           <a t-attf-href="#" class="mb8 js_quantity-reorder" t-on-click="clickMinus">
+                               <i class="fa fa-minus" style="font-size: 20px;"/>
+                           </a>
+                       </span>
+                       <input id="custom_popup_input" type="text" t-model="state.productQty"
+                              t-on-keydown="onInputKeyDownNumberVlidation"/>
+
+                       <span class="plus">
+                           <a t-attf-href="#" class="mb8 float_left js_quantity-reorder" t-on-click="clickPlus">
+                               <i class="fa fa-plus" style="font-size: 20px;"/>
+                           </a>
+                       </span>
+                   </td>
+                   <td style="width:10%;text-align: center;cursor: pointer;"
+                       class="remove_line"
+                       t-on-click="trigger('delete-popup-orderline',{'orderline_id': props.line.id })">
+                        <i class="fa fa-trash" style="font-size: 20px;"/>
+                   </td>
+               </tr>
+           </t>
+        </t>
+</templates>

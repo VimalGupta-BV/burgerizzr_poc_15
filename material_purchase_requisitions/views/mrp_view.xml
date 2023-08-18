@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+    	<record model="ir.ui.view" id="bv_mrp_production_form_view">
+          <field name="name">bv.mrp.production.form.view</field>
+          <field name="model">mrp.production</field>
+          <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+          <field name="arch" type="xml">
+            <button name="action_confirm" position="after">
+                <button name="%(material_purchase_requisitions.action_material_request_wz)d" string="Material Request"  type="action" class="oe_highlight" 
+                    /> 
+            </button>
+            <field name="user_id" position="after">
+                <field name="requisition_id" readonly="1"/>
+            </field>
+            
+          </field>
+      </record>
+    </data>
+</odoo>

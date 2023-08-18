@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_users_form_view_inh" model="ir.ui.view">
+            <field name="name">res.users.form.view.ace</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[2]" position='after'>
+                    <page string='Point of Sale'>
+                        <group colspan="2">
+                            <group>
+                                <field name="kitchen_screen_user"/>
+                                <field name="pos_category_ids" widget="many2many_tags"
+                                       attrs="{'invisible' : ['|',('kitchen_screen_user', '=', False),
+                                       ('kitchen_screen_user', '!=', 'cook')],
+                                       'required' : [('kitchen_screen_user', '!=', False),('kitchen_screen_user','==','cook')]}"/>
+                                <field name="default_pos" attrs="{'invisible' : [('kitchen_screen_user', 'not in', ['cook', 'waiter'])],
+                                                                 'required' : [('kitchen_screen_user', 'in', ['cook', 'waiter'])]}"/>
+                                <field name="is_delete_order_line" attrs="{'invisible' : ['|',('kitchen_screen_user', '=', False),
+                                       ('kitchen_screen_user', '!=', 'manager')],
+                                       'required' : [('kitchen_screen_user', '!=', False),('kitchen_screen_user','==','manager')]}"/>
+
+                                <field name="delete_order_line_reason"
+                                       attrs="{'invisible' : [('is_delete_order_line', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="pin"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="access_money_in_out"/>
+                                <field name="access_gift_card"/>
+                                <field name="access_gift_voucher"/>
+                                <field name="access_bag_charges"/>
+                                <field name="access_pos_lock"/>
+                                <field name="access_vertical_category"/>
+                                <field name="access_close_session"/>
+                                <field name="access_product_summary"/>
+                                <field name="access_payment_summary"/>
+                                <field name="access_pos_order_note"/>
+                            </group>
+                            <group>
+                                <field name="access_wallet"/>
+                                <field name="access_default_customer"/>
+                                <field name="access_warehouse_qty"/>
+                                <field name="access_multi_uom"/>
+                                <field name="access_purchase_history"/>
+                                <field name="access_purchase_order"/>
+                                <field name="access_pos_return"/>
+                                <field name="access_signature"/>
+                                <field name="access_order_summary"/>
+                                <field name="access_audit_report"/>
+                                <field name="access_delivery_charges"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

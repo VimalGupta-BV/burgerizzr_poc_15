@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ActionpadWidget" t-inherit="point_of_sale.ActionpadWidget" t-inherit-mode="extension" owl="1">
+        <xpath expr="//button[hasclass('set-customer')]" position="replace">
+            <button class="button set-customer" t-att-class="{'decentered': isLongName}"
+                    t-on-click="trigger('click-customer')" t-att-disabled="env.pos.get_order().get_refund_order()">
+                <t t-if="!env.isMobile"><i class="fa fa-user" role="img" aria-label="Customer" title="Customer" /></t>
+                <t t-if="client">
+                    <t t-esc="client.name"/>
+                </t>
+                <t t-else="">
+                    Customer
+                </t>
+            </button>
+            <button class="button send-to-kitchen"
+                    t-on-click="trigger('click-send-to-kitchen')" t-att-disabled="!isKitchenButton">
+                <t t-if="!env.isMobile"><i class="fa fa-bell" role="img" aria-label="Send to Kitchen" title="Send order to kitchen" /></t>
+                Send to Kitchen 
+            </button>
+
+           <!--  <button class="button click-extra-recipe"
+                    t-on-click="trigger('click-extra-recipe')" >
+               <i class="fa fa-bell" role="img" aria-label="Extra Recipe" title="Extra Recipe" />
+               Extra Recipe
+            </button> -->
+            
+        </xpath>
+    </t>
+</templates>

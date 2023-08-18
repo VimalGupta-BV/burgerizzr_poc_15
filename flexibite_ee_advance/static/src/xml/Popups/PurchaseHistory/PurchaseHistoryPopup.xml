@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PurchaseHistoryPopup" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <Draggable>
+                <div class="popup purchase-history">
+                    <header class="title purchase-title drag-handle">
+                        <div class="main-div">
+                            <div class="left-side">
+                                <div class="header-tab"
+                                 t-att-class="{ active: state.ProductPurchaseHistory === 'CartProduct' }"
+                                 t-on-click="CartProductPurchaseHistory('cart')">
+                                Cart Products
+                            </div>
+                            <div class="header-tab"
+                                 t-att-class="{ active: state.ProductPurchaseHistory === 'LastOrder' }"
+                                 t-on-click="CartProductPurchaseHistory('last')">
+                                Last Order
+                            </div>
+                            </div>
+                            <div class="right-side">
+                                <div class="" t-on-click="trigger('print-product-and-order-receipt')"><i class="fa fa-print"/></div>
+                                <div class="" t-on-click="cancel"><i class="fa fa-close"/></div>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="purchase-history-main">
+                        <div class="purchase-history-item">
+                            <t t-esc="env.pos.get_order().get_client_name()"/>
+                        </div>
+                        <div class="purchase-history-item">
+                            <div class="history-info" t-if="state.ProductPurchaseHistory === 'LastOrder'">
+                                <div class="history-info-item">
+                                    <t t-esc="props.last_order_name"/>
+                                </div>
+                                <div class="history-info-item opacity_0_7">
+                                    Ordered Date : <t t-esc="props.last_order_date"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-info-line">
+                        <div class="product-history-row-main"
+                             t-foreach="state.ProductPurchaseHistory === 'LastOrder' ? props.last_purchase_history : props.product_history" t-as="data">
+                            <div class="product-history-row-item flex-2">
+                                <t t-set="product" t-value="env.pos.db.get_product_by_id(data.product_id)"/>
+                                <t t-esc="product.display_name"/>
+                                <ul style="color:#888;">
+                                    <li style="margin-left:10px;font-size: 13px;">
+                                        <b>
+                                            <t t-esc="data.qty"/>
+                                        </b>
+                                        <t t-esc="data.uom_name"/>
+                                        at
+                                        <t t-esc="env.pos.format_currency(product.lst_price,'Product Price')"/>
+                                        /
+                                        <t t-esc="data.uom_name"/>
+                                        on
+                                        <b>
+                                            <t t-esc="data.date_order"/>
+                                        </b>
+                                        <t t-if="state.ProductPurchaseHistory === 'CartProduct'">
+                                            from
+                                            <t t-esc="data.name"/>
+                                        </t>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="product-history-row-item flex-1">
+                                <t t-esc="env.pos.format_currency(data.price_subtotal_incl,'Product Price')"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Draggable>
+        </div>
+    </t>
+
+</templates>

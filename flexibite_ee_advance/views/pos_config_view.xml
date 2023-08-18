@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="aspl_pos_flexiBite_config_view_form">
+            <field name="name">pos.config.form.view.inherit</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+
+                    <h2 name="order">Kitchen Screen</h2>
+                    <div class="row mt16 o_settings_container" id="pos_wallet">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_gift_voucher">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group mt16">
+                                    <div class="row mt16">
+                                        <label string="Restaurant Mode" for="restaurant_mode"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="restaurant_mode"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="order_type">
+                        <div class="col-6 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Order Type</span>
+                                <div class="text-muted">
+                                    Select Type As Per Your Requirement
+                                </div>
+                                <field name="order_type_ids" widget="many2many_tags"
+                                       options="{'no_create': True,'no_open':True}"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Default Type</span>
+                                <div class="text-muted">
+                                    Select default order type
+                                </div>
+                                <field name="default_type_id" widget="many2one"
+                                       options="{'no_create': True,'no_open':True}"
+                                       domain="[('id', 'in', order_type_ids)]"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">POS Delivery Service</span>
+                                <div class="text-muted">
+                                    Select Delivery Service
+                                </div>
+                                <field name="delivery_service_ids" widget="many2many_tags"
+                                       options="{'no_create': True,'no_open':True}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 name="order">FlexiBite</h2>
+                    <div class="row mt16 o_settings_container" id="pos_login_screen">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="partner">
+                            <div class="o_setting_left_pane">
+                                <field name="show_warehouse_qty"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="show_warehouse_qty" string="Display Stock"/>
+                                <div class="text-muted">
+                                    Display Warehouse Quantity
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="trans_stock"
+                             groups="stock.group_stock_multi_locations">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_int_trans_stock"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_int_trans_stock"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- #     Wallet Functionality -->
+                    <div class="row mt16 o_settings_container" id="pos_wallet">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_wallet"
+                             attrs="{'invisible' : [('cash_control', '=', False)]}">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_wallet"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_wallet"/>
+                                <div class="text-muted" id="enable_wallet">
+                                    POS Wallet
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_wallet', '=', False)],'required':[('enable_wallet','=',True)]}">
+                                    <div class="row mt16">
+                                        <label string="Wallet Product" for="wallet_product"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="wallet_product" domain="[('available_in_pos','=', True)]"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Account" for="wallet_account_id"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="wallet_account_id"
+                                               domain="[('user_type_id.internal_group','=','liability')]"
+                                               attrs="{'invisible': [('enable_wallet', '=', False)], 'required': [('enable_wallet', '=', True)]}"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Payment Method" for="wallet_payment_method_id"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="wallet_payment_method_id"
+                                               attrs="{'invisible': [('enable_wallet', '=', False)], 'required': [('enable_wallet', '=', True)]}"
+                                               domain="[('jr_use_for', '=', 'wallet')]"
+                                               context="{'payment_method_ids': payment_method_ids, 'config_jr': True}"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- #     Gift Card Functionality -->
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_wallet">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_gift_card"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_gift_card"/>
+                                <div class="text-muted" id="enable_wallet">
+                                    Enable to use Gift Card in POS Interface.
+                                </div>
+                                <div class="text-muted">
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_gift_card', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label string="Product" for="gift_card_product_id"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="gift_card_product_id" domain="[('available_in_pos','=','True')]"
+                                               attrs="{'invisible':[('enable_gift_card','=',False)],'required':[('enable_gift_card','=',True)]}"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Account" for="gift_card_account_id"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="gift_card_account_id"
+                                               domain="[('user_type_id.internal_group','=','liability')]"
+                                               attrs="{'invisible':[('enable_gift_card','=',False)],'required':[('enable_gift_card','=',True)]}"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Payment Method" for="enable_journal_id"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="enable_journal_id"
+                                               domain="[('jr_use_for', '=', 'gift_card')]"
+                                               attrs="{'invisible':[('enable_gift_card','=',False)],'required':[('enable_gift_card','=',True)]}"
+                                               context="{'payment_method_ids': payment_method_ids, 'config_jr': True}"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                    <div class="row mt18">
+                                        <div style="width: 50%;">
+                                            <div style="width: 50%; float: left; margin-top: 16px; ">
+                                                <label string="Manual Card Number" for="manual_card_number"
+                                                       class="col-md-3 o_light_label"/>
+                                            </div>
+                                            <div style="width: 50%; float: right; margin-top: 16px; ">
+                                                <field name="manual_card_number"/>
+                                            </div>
+
+                                        </div>
+                                        <div style="width: 50%;">
+                                            <div style="width: 50%; float: left; margin-top: 16px; ">
+                                                <label string="Enable Confirmation Message" for="msg_before_card_pay"
+                                                       class="col-md-3 o_light_label"/>
+                                            </div>
+                                            <div style="width: 50%; float: right; margin-top: 16px; ">
+                                                <field name="msg_before_card_pay"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Default Expire Month" for="default_exp_date"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="default_exp_date"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_wallet">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_default_customer">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_default_customer"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_default_customer"/>
+                                <div class="text-muted" id="enable_default_customer">
+                                    Select Default Customer for Order
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_default_customer', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="default_customer_id" class="col-md-3 o_light_label"
+                                               style="width: 170px;"/>
+                                        <field name="default_customer_id"
+                                               attrs="{'invisible': [('enable_default_customer', '=', False)], 'required': [('enable_default_customer', '=', True)]}"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_wallet">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_gift_voucher">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_gift_voucher"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_gift_voucher"/>
+                                <div class="text-muted" id="enable_gift_voucher">
+                                    Gift Voucher
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_gift_voucher', '=', False)],'required':[('enable_gift_voucher','==',True)]}">
+                                    <div class="row mt16">
+                                        <label string="Payment Method" for="gift_voucher_journal_id"
+                                               class="col-md-3 o_light_label"/>
+                                        <field name="gift_voucher_journal_id"
+                                               domain="[('jr_use_for', '=', 'gift_voucher')]"
+                                               options="{'no_create': True,'no_open':True, 'no_edit': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_wallet">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_gift_voucher">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_bag_charges"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_bag_charges"/>
+                                <div class="text-muted" id="enable_bag_charges">
+                                    Bag Charges
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="enable_gift_voucher">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_multi_uom"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_multi_uom"/>
+                                <div class="text-muted" id="enable_multi_uom">
+                                    Multi UOM
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="auto_lock">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_automatic_lock"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_automatic_lock" string="Automatic Lock"/>
+                                <div class="text-muted">
+                                    Automatic Lock
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="manual_lock">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_manual_lock"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_manual_lock" string="Manual"/>
+                                <div class="text-muted">
+                                    Manual Lock
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_right_pane"
+                                 attrs="{'invisible':[('enable_automatic_lock','!=',True)]}">
+                                <label for="time_interval"/>
+                                <div class="text-muted">
+                                    Time Interval (default 3 minute)
+                                </div>
+                                <div class="content-group mt16">
+                                    <field name="time_interval"/>Minute
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="is_customer_purchase_history"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="is_customer_purchase_history"/>
+                                <div class="text-muted">
+                                    Enable to see the Product History for the selected customer
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_vertical_category"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_vertical_category"/>
+                                <div class="text-muted">
+                                    Enable to vertical product category
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_vertical_category"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_vertical_category"/>
+                                <div class="text-muted">
+                                    Enable to vertical product category
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_pos_return"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_pos_return"/>
+                                <div class="text-muted">
+                                    Enable to create order return from POS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_signature"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_signature"/>
+                                <div class="text-muted">
+                                    Enable to add signature from POS
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_product_screen"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_product_screen"/>
+                                <div class="text-muted">
+                                    Enable to show Product screen and create Purchase order from POS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_pos_serial"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_pos_serial"/>
+                                <div class="text-muted">
+                                    Serials/Lots
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_pos_serial', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="restrict_lot_serial" class="col-md-3 o_light_label"/>
+                                        <field name="restrict_lot_serial"
+                                               attrs="{'invisible' : [('enable_pos_serial', '=', False)]}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_order_note"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_order_note"/>
+                                <div class="text-muted">
+                                    Order/Product Note
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_order_note', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="enable_product_note" class="col-md-3 o_light_label"/>
+                                        <field name="enable_product_note"
+                                               attrs="{'invisible' : [('enable_order_note', '=', False)]}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="is_ordernote_receipt" class="col-md-3 o_light_label"/>
+                                        <field name="is_ordernote_receipt"
+                                               attrs="{'invisible' : [('enable_order_note', '=', False)]}"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="is_productnote_receipt" class="col-md-3 o_light_label"/>
+                                        <field name="is_productnote_receipt"
+                                               attrs="{'invisible' : [('enable_order_note', '=', False)]}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_lock_screen">
+                        <div class="col-12 col-lg-6 o_setting_box" id="reorder">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_delivery_charges"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_delivery_charges"/>
+                                <div class="text-muted mb16" id="active_ingredients">
+                                    Enable Delivery charges
+                                </div>
+                                <div class="content-group"
+                                     attrs="{'invisible' : [('enable_delivery_charges', '=', False)]}">
+                                    <div class="row">
+                                        <label for="delivery_product_id" class="col-lg-4 o_light_label"/>
+                                        <field name="delivery_product_id"
+                                               attrs="{'required' : [('enable_delivery_charges', '=', True)]}"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="delivery_product_amount" class="col-lg-4 o_light_label"/>
+                                        <field name="delivery_product_amount"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 name="order">Reports</h2>
+                    <div class="row mt16 o_settings_container" id="pos_login_screen">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="partner">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_product_summary"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_product_summary"/>
+                                <div class="text-muted">
+                                    Enable to Print Product Summary
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_product_summary', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="product_current_month_date" class="col-md-3 o_light_label"/>
+                                        <field name="product_current_month_date"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="product_summary_signature" class="col-md-3 o_light_label"/>
+                                        <field name="product_summary_signature"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="trans_stock">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_order_summary"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_order_summary"/>
+                                <div class="text-muted">
+                                    Enable to Print Order Summary
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_order_summary', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="order_current_month_date" class="col-md-3 o_light_label"/>
+                                        <field name="order_current_month_date"/>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label for="order_signature" class="col-md-3 o_light_label"/>
+                                        <field name="order_signature"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" id="pos_login_screen">
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="partner">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_payment_summary"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_payment_summary"/>
+                                <div class="text-muted">
+                                    Enable to Print Payment Summary
+                                </div>
+                                <div class="content-group mt16"
+                                     attrs="{'invisible' : [('enable_payment_summary', '=', False)]}">
+                                    <div class="row mt16">
+                                        <label for="payment_current_month_date" class="col-md-3 o_light_label"/>
+                                        <field name="payment_current_month_date"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box" id="trans_stock">
+                            <div class="o_setting_left_pane">
+                                <field name="enable_audit_report"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="enable_audit_report"/>
+                                <div class="text-muted">
+                                    Enable to Print Audit Summary
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

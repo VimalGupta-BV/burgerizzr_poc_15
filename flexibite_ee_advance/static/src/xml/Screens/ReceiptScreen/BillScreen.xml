@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-inherit="pos_restaurant.BillScreen" t-inherit-mode="extension" t-name="BillScreenInh" owl="1">
+        <xpath expr="//div[hasclass('top-content-center')]" position="replace">
+            <div class="top-content-center">
+                <h1>
+                    <t t-if="!props.check">
+                        Bill Printing
+                    </t>
+                    <t t-else="">
+                        Receipt
+                    </t>
+                </h1>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('pos-receipt-container')]" position="replace">
+            <div class="pos-receipt-container">
+                <t t-if="props.check == 'from_warehouse'">
+                    <WarehouseReceipt warehouse="props.receiptData"
+                                      product="props.productName"
+                                      t-ref="order-receipt"/>
+                </t>
+                <t t-if="props.check == 'from_internal_transfer'">
+                    <InternalTransferReceipt RecordData="props.receiptData" RecoedLine="props.receiptLineData"
+                                             t-ref="InternalTransfer-receipt"/>
+                </t>
+                <t t-if="props.check == 'from_product_history'">
+                    <PurchaseHistoryReceipt ProductPurchaseHistory="props.ProductPurchaseHistory"
+                                            customer_name="props.customer_name" last_order_name='props.last_order_name'
+                                            pos='props.pos'
+                                            last_order_date="props.last_order_date"
+                                            data="props.data"
+                                            t-ref="order-receipt"/>
+                </t>
+                <t t-if="props.check == 'from_product_summary'">
+                    <ProductSummaryReceipt ProductSummaryData="props.ProductSummaryData"
+                                           CategorySummaryData="props.CategorySummaryData"
+                                           PaymentSummaryData="props.PaymentSummaryData"
+                                           LocationSummaryData="props.LocationSummaryData" pos='props.pos'
+                                           values="props.values" receipt="props.receipt"
+                                           t-ref="order-receipt"
+                    />
+                </t>
+                <t t-if="props.check == 'from_order_summary'">
+                    <OrderSummaryReceipt OrderReportData="props.OrderReportData"
+                                         CategoryReportData="props.CategoryReportData"
+                                         PaymentReportData="props.PaymentReportData" receipt="props.receipt"
+                                         values="props.values" pos="props.pos" t-ref="order-receipt"
+                    />
+                </t>
+                <t t-if="props.check == 'from_payment_summary'">
+                    <PaymentSummaryReceipt JournalReportData="props.JournalReportData"
+                                           SalesReportData="props.SalesReportData"
+                                           TotalSummaryData="props.TotalSummaryData" receipt="props.receipt"
+                                           values="props.values" pos="props.pos"
+                                           t-ref="order-receipt"/>
+                </t>
+                <t t-if="props.check == 'from-packLot-screen'">
+                    <PosSerialReceipt receiptData="props.receiptData" t-ref="order-receipt"/>
+                </t>
+                <t t-if="!props.check">
+                    <OrderReceipt order="currentOrder" t-ref="order-receipt"/>
+                </t>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

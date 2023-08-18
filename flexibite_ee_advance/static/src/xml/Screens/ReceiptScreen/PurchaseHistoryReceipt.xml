@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PurchaseHistoryReceipt" owl="1">
+        <div class="pos-receipt">
+            <strong>
+                <div class="pos-center-align" t-esc="props.ProductPurchaseHistory === 'LastOrder' ? 'Last Order Details' :'Product History'"/>
+                ----------------------------------------------------
+                <br/>
+                <div class="pos-center-align"><t t-esc="props.customer_name"/></div>
+                <t t-if="props.ProductPurchaseHistory === 'LastOrder'">
+                    <div class="pos-center-align">Ordered Name : <t t-esc="props.last_order_name"/></div>
+                    <div class="pos-center-align">Ordered Date : <t t-esc="props.last_order_date"/></div>
+                </t>
+            </strong>
+            <br/>
+            <br/>
+            <div class="flex-orderlines">
+                <div class="orderline-left">
+                    <strong>Product</strong>
+                </div>
+                <div class="orderline-right">
+                    <strong>Price</strong>
+                </div>
+            </div>
+            <br/>
+            <div class="flex-orderlines" t-foreach="props.data" t-as="data">
+                <div class="orderline-left">
+                    <t t-set="product" t-value="props.pos.db.get_product_by_id(data.product_id)"/>
+                    <div t-esc="product.display_name"/>
+                    <div class="opacity-fade" style="font-size:15px;">
+                        <b><t t-esc="data.qty"/></b>
+                        <t t-esc="product.uom_id[1]"/>
+                        at
+                        <t t-esc="props.pos.format_currency(product.lst_price,'Product Price')"/>
+                        /
+                        <t t-esc="product.uom_id[1]"/>
+                        <br/>
+                        on
+                        <b>
+                            <t t-esc="data.date_order"/>
+                        </b>
+                        from
+                        <t t-esc="data.name"/>
+                    </div>
+                </div>
+                <div class="orderline-right">
+                    <t t-esc="props.pos.format_currency(data.price_subtotal_incl,'Product Price')"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

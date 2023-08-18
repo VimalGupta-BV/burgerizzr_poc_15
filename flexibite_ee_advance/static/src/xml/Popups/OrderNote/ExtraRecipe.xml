@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+     <t t-name="ExtraRecipePopup" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <Draggable>
+                <div class="popup popup-textarea">
+                    <header class="title drag-handle">
+                        <t t-esc="props.title"/>
+                    </header>
+                   <main class="body">
+                        <div class="section-product-info-title">
+                                <div class="column flex-start">
+                                    <table>
+                                        <thead>
+                                                <tr>
+                                                    <th>
+                                                        Product
+                                                    </th>
+                                                    <th>
+                                                        Quantity
+                                                    </th>
+                                                   
+                                                </tr>
+                                        </thead>
+                                        <t t-foreach="props.body" t-as="line" t-key="line.id">
+                                        <tbody>
+                                            <td>
+                                                 <input t-model="line['product_id']" type="text" name="product"/>
+
+                                            </td>
+                                            <td>
+                                                 <input t-model="line['quantity']" type="text" name="quantity"/>
+
+                                            </td>
+                                            
+                                        </tbody>
+                                        </t>
+                                    </table>
+                                </div>
+                            </div>
+                    </main>
+                   <!--  <textarea t-model="state.inputValue" t-ref="input" rows="7" cols="30"></textarea> -->
+                    <footer class="footer">
+                        <div class="button confirm" t-on-click="confirm">
+                            <t t-esc="props.confirmText"/>
+                        </div>
+                        <div class="button cancel" t-on-click="cancel">
+                            <t t-esc="props.cancelText"/>
+                        </div>
+                    </footer>
+                </div>
+            </Draggable>
+        </div>
+    </t>
+
+
+</templates>

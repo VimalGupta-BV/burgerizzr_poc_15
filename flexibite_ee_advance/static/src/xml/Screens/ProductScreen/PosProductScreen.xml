@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ProductScreenInh" t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('control-buttons')]" position="replace"></xpath>
+        <xpath expr="//div[hasclass('leftpane')]" position="before">
+            <sideBarMenu t-if="!env.isMobile"/>
+            <div class="side-bar" t-if="!env.isMobile">
+                <ul class="menu">
+                    <li title="home">
+                        <span t-attf-class="{{ toggle }}" t-on-click="trigger('open-control-button')">
+                            <i t-attf-class="fa {{addClass}}" title="Control Buttons"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config and env.pos.config.cash_control and env.pos.user.access_money_in_out">
+                        <span class="span-text" t-on-click="trigger('create-money-in-out')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                        <img class="money_src" src="/flexibite_ee_advance/static/src/img/icons/money_icon.jpg"
+                             title="Cash In/Out"/>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="span-text" t-on-click="trigger('empty-cart')">
+                            <i class="fa fa-shopping-cart" title="Empty Cart"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config.is_customer_purchase_history and env.pos.get_order().get_client() and env.pos.user.access_purchase_history">
+                        <span class="span-text" t-on-click="trigger('open-purchase-history-popup')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                            <i class="fa fa-history" title="Customer History"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config.show_warehouse_qty and env.pos.user.access_warehouse_qty">
+                        <span class="span-text" t-on-click="trigger('show-warehouse')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                            <img class="money_src" src="/flexibite_ee_advance/static/src/img/icons/BlackWarehouse.png" title="Warehouse"/>
+                        </span>
+                    </li>
+<!--                    <li t-if="env.pos.config.enable_int_trans_stock and env.pos.user.access_int_trans_stock">-->
+<!--                        <span class="span-text" t-on-click="trigger('create-internal-transfer')"-->
+<!--                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">-->
+<!--                            <img class="money_src" src="/flexi_spa_salon/static/src/img/icons/transfer.png" title="Internal Transfer"/>-->
+<!--                        </span>-->
+<!--                    </li>-->
+                    <li t-if="env.pos.config.enable_wallet and env.pos.get_order().get_client() and env.pos.user.access_wallet and env.pos.user.kitchen_screen_user == 'manager'">
+                        <span class="span-text" t-on-click="trigger('add_wallet_amount')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                            <img class="money_src" src="/flexibite_ee_advance/static/src/img/icons/wallet.png" title="Wallet"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config.enable_gift_card and env.pos.user.access_gift_card and env.pos.user.kitchen_screen_user == 'manager'">
+                        <span class="span-text" t-on-click="trigger('open-gift-card-screen')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                            <img class="money_src" src="/flexibite_ee_advance/static/src/img/icons/clipart2943916.png" title="Gift Card"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config.enable_gift_voucher and env.pos.user.access_gift_voucher and env.pos.user.kitchen_screen_user == 'manager'">
+                        <span class="span-text" t-on-click="trigger('open-gift-voucher-screen')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                            <img class="money_src" src="/flexibite_ee_advance/static/src/img/icons/gift_voucher.png" title="Gift Voucher"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config.enable_bag_charges and env.pos.user.access_bag_charges">
+                        <span class="span-text" t-on-click="trigger('apply-bag-charges')"
+                              t-att-class="{ highlight: state.is_packaging_filter }">
+                            <img class="money_src" src="/flexibite_ee_advance/static/src/img/icons/bags.png" title="Bag Charges"/>
+                        </span>
+                    </li>
+                    <li t-if="env.pos.config.enable_pos_return and env.pos.user.access_pos_return">
+                        <span id="OrderReturn" class="span-text"
+                              t-on-click="trigger('show-order-return-screen')"
+                              t-att-class="{ disabled: !env.pos.get_order().get_connected() }">
+                            <i class="fa fa-share-square-o" title="Order Return"/>
+                        </span>
+                    </li>
+                    <!-- // if Product Or Order note-->
+                    <li t-if="env.pos.config.enable_order_note and env.pos.user.access_pos_order_note">
+                        <span id="OrderProductNote" class="span-text"
+                              t-on-click="trigger('show-order-note-popup')"
+                              t-att-class="{ highlight: env.pos.get_order().get_order_note() }">
+                            <img class="money_src"
+                                 src="/flexibite_ee_advance/static/src/img/icons/clipart2090813.png" title="Order Note"/>
+                        </span>
+                   </li>
+                    <li t-if="env.pos.config.enable_delivery_charges and env.pos.user.access_delivery_charges and env.pos.get_order().get_client()">
+                        <span class="span-text"
+                              t-on-click="trigger('add-delivery-charge')"
+                              t-att-class="{ highlight: env.pos.get_order().get_delivery_charge_data().IsDeliveryCharge, disabled: !env.pos.get_order().get_connected() }">
+                            <img  class="money_src" src="/flexibite_ee_advance/static/src/img/icons/delivery_charge.png"
+                                 title="Delivery Charge"/>
+                        </span>
+                    </li>
+                </ul>
+                <ul t-attf-class="menu-bar {{highlight}}">
+                    <t t-foreach="controlButtons" t-as="cb" t-key="cb.name">
+                        <t t-component="cb.component" t-key="cb.name"/>
+                    </t>
+                </ul>
+            </div>
+        </xpath>
+         <xpath expr="//div[hasclass('leftpane')]//OrderWidget" position="replace">
+               <div class="tabs tabs-style-underline">
+                <nav>
+                    <ul>
+                        <li t-foreach="env.pos.config.order_type_ids" t-as="order_type_id" t-key="order_type_id"
+                            t-att-class="{'custom-selected-mode': state.orderTypeMode === getTypeName(order_type_id)}"
+                            t-on-click="changeMode(order_type_id)">
+                            <span>
+                                <t t-if="getTypeName(order_type_id) === 'Dine In'">
+                                    <img class="switch-icon" src="/flexibite_ee_advance/static/src/img/table(1).png"/>
+                                </t>
+                                <t t-if="getTypeName(order_type_id) === 'Take Away'">
+                                    <img class="switch-icon" src="/flexibite_ee_advance/static/src/img/take-away(2).png"/>
+                                </t>
+                                <t t-if="getTypeName(order_type_id) === 'Delivery'">
+                                    <img class="switch-icon" src="/flexibite_ee_advance/static/src/img/delivery-man(1).png"/>
+                                </t>
+                                <t t-esc="getTypeName(order_type_id)"/>
+                            </span>
+                        </li>
+                        <!--                        <li></li>-->
+                        <!--                        <li><span><img class="switch-icon" src="/flexibite_ee_advance/static/src/img/take-away(2).png"/>Take Away</span></li>-->
+                        <!--                        <li><span><img class="switch-icon" src="/flexibite_ee_advance/static/src/img/delivery-man(1).png"/>Delivery </span></li>-->
+                    </ul>
+                </nav>
+            </div>
+                <t t-if="state.serials">
+                    <OrderWidget serials="state.serials"/>
+                </t>
+                <t t-else="">
+                    <OrderWidget/>
+                </t>
+        </xpath>
+        <xpath expr="//div[hasclass('rightpane')]" position="replace">
+            <div class="rightpane" t-if="!env.isMobile || mobile_pane === 'right'">
+                <t t-if="!env.isMobile and state.warehouse_mode and !props.showOrderPanel">
+                    <div class="flex-container">
+                        <WarehouseScreen displayData="state.warehouseData" productName="state.title"/>
+                    </div>
+                </t>
+                <t t-if="!env.isMobile and props.showOrderPanel and !state.warehouse_mode">
+                    <div class="draft_order-screen">
+                        <div class="controls">
+                            <button class="button back" t-on-click="trigger('close-draft-screen')">
+                                <t t-if="!env.isMobile">
+                                    <i class="fa  fa-angle-double-left"/>
+                                    Close
+                                </t>
+                                <t t-else="">
+                                    <i class="fa fa-undo"/>
+                                </t>
+                            </button>
+                        </div>
+                        <div class="green-border-bottom" style="border-bottom: solid 2px rgb(134 134 134);"/>
+                        <div class="orders">
+                            <div class="header-row">
+                                <div class="col start wide">Receipt/Ref</div>
+                                <div class="col start wide">Customer</div>
+                                <div class="col start wide">Salesman</div>
+                                <div class="col start wide">Order Amount</div>
+                                <div class="col center very-narrow"></div>
+                                <div class="col center very-narrow" name="delete"></div>
+                            </div>
+                            <t t-if="env.pos.db.get_draft_orders_list()">
+                                <t t-foreach="env.pos.db.get_draft_orders_list()" t-as="order" t-key="order.id">
+                                    <div class="order-row pointer">
+                                        <div class="col start wide">
+                                            <t t-esc="order.pos_reference"/>
+                                        </div>
+                                        <div class="col start wide">
+                                            <t t-esc="order.partner_id[1]"/>
+                                        </div>
+                                        <div class="col start wide">
+                                            <t t-esc="order.salesman_id[1]"/>
+                                        </div>
+                                        <div class="col start wide">
+                                            <t t-esc="env.pos.format_currency(order.amount_total)"/>
+                                        </div>
+                                        <div class="col center very-narrow" t-on-click="quick_pay(order.id)">
+                                            <i class="fa fa-money" aria-hidden="true" style="font-size: x-large;"/>
+                                        </div>
+                                        <div class="col center very-narrow" t-on-click="quick_delete(order.id)">
+                                            <i class="fa fa-trash" aria-hidden="true" style="font-size: x-large;"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+                <t t-if="!env.isMobile and !state.warehouse_mode and !props.showOrderPanel">
+                    <ProductsWidget t-if="!state.cashControl" isPackaging="state.isPackaging"/>
+                    <t t-if="env.isMobile">
+                        <MobileOrderWidget pane="mobile_pane" t-on-switchpane="switchPane"/>
+                    </t>
+                </t>
+            </div>
+        </xpath>
+    </t>
+    <t t-name="ProductItemIng" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+        <xpath expr="//article" position="replace">
+            <article class="product" tabindex="0" t-on-keypress="spaceClickProduct"
+                     t-on-click="trigger('click-product', props.product)"
+                     t-att-data-product-id="props.product.id"
+                     t-attf-aria-labelledby="article_product_{{props.product.id}}">
+                <div class="c-product">
+                    <div class="p-image"><img t-att-src="imageUrl" t-att-alt="props.product.display_name" /></div>
+                    <div class="p-des">
+                        <div class="c-product-name">
+                            <t t-esc="props.product.display_name" />
+                        </div>
+                        <div class="rating">
+                            <div class="price">
+                                <t t-esc="price" />
+                            </div>
+                            <div class="quantity">
+                                <i role="img" aria-label="Info" title="Info" class="fa fa-info-circle"
+                                     t-on-click.stop="onProductInfoClick()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </xpath>
+    </t>
+</templates>

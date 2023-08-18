@@ -1,0 +1,29 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="WarehouseScreen" owl="1">
+        <div class="warehouse-screen">
+            <div class="warehouse-header">
+                <button class="close letter-space" t-on-click="trigger('close-warehouse-screen')"> 
+                    <i class="fa fa-angle-double-left"/>
+                    <span> Back</span>
+                </button>
+                <span class="title letter-space">
+                    <t t-esc="props.productName"/>
+                </span>
+            </div>
+            <div class="wrapper1">
+                <div class="grid-container parent">
+                    <div class="item-left">Name</div>
+                    <div class="item-right">Available Qty.</div>
+                    <div class="item-right">Incoming Qty.</div>
+                    <div class="item-right">Outgoing Qty.</div>
+                    <div class="item-center" t-on-click="trigger('show-warehouse-receipt')">
+                        <i class="fa fa-print"/>
+                    </div>
+                </div>
+                <t t-foreach="props.displayData" t-as="warehouse">
+                    <Accordian warehouse="warehouse"/>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

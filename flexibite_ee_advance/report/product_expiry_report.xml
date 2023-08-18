@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_expiry_report" model="ir.actions.report">
+            <field name="name">Product Expiry Report</field>
+            <field name="model">product.expiry.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flexibite_ee_advance.product_exp_report_template</field>
+            <field name="report_file">flexibite_ee_advance.product_exp_report_template</field>
+            <field name="print_report_name">'Product Expiry Report'</field>
+            <field name="binding_model_id" ref="model_product_expiry_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="pos_sales_report_pdf_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <t t-foreach="docs" t-as="o">
+                            <div style="border:1px solid black;text-align:center;font-size:25px">
+                                <strong>Z Report</strong>
+                            </div>
+                            <t t-set="current_date_time" t-value="o.get_current_date_time()"/>
+                            <t t-set="session_date_time" t-value="o.get_session_date_time(False)"/>
+                            <t t-set="gross_total" t-value="o.get_gross_total()"/>
+                            <t t-set="gross_profit" t-value="o.get_gross_profit()"/>
+                            <t t-set="gross_net_total" t-value="0"/>
+                            <table style="width:100%;margin-top:15px;">
+                                <tr>
+                                    <td class="text-left">
+                                        Report Date
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="current_date_time.get('date')"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Report Time
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="current_date_time.get('time')"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="width:100%;margin-top:15px;">
+                                <tr>
+                                    <td class="text-left">
+                                        Register #
+                                    </td>
+                                    <td class="text-right">
+                                        1
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Batch #
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Batch Status
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="o.state"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Started at
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="session_date_time.get('start_date')"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Ended at
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="session_date_time.get('end_date')"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Cashier
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="o.user_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table style="width:100%;margin-top:15px;">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left">
+                                            Opening Total
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.cash_register_balance_start"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Sales
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.get_total_sales()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Return Sales
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.get_total_return_sales()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Tax
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.get_total_tax()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Discount Amount
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.get_total_discount()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Gross Total
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="gross_total"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Gross Profit
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="gross_profit"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">
+                                            Net Gross Profit
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="o.get_net_profit()"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2"/>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Closing Total</td>
+                                        <td class="text-right">
+                                            <span t-esc="o.cash_register_balance_end_real"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="border-bottom:1px solid;"/>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div style="text-align:center">
+                                <br/>
+                                Pos Category Sales
+                            </div>
+                            <t t-set="categ_total" t-value="0"/>
+                            <table style="width:100%">
+                                <!-- <thead>
+                                    <tr t-foreach="o.get_product_category()" t-as="cat">
+                                        <td class="text-left">
+                                            <span t-esc="cat.get('category') or 'Others'"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-set="categ_total" t-value="categ_total + cat.get('price')"/>
+                                            <span t-esc="'{0:.2f}'.format(cat.get('price'))"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </thead> -->
+                                <thead>
+                                    <tr t-foreach="o.get_product_category()" t-as="cat">
+                                        <td class="text-left">
+                                            <span t-esc="cat.get('category') or 'Others'"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-set="categ_total" t-value="categ_total + cat.get('total')"/>
+                                            <span t-esc="cat.get('total')"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" style="border-bottom:1px solid;"/>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Total</td>
+                                        <td class="text-right">
+                                            <span t-esc="categ_total"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div style="text-align:center">
+                                <br/>
+                                Payment Method Sales
+                            </div>
+                            <table style="width:100%;margin-top:15px;">
+                                <t t-set="payment_total" t-value="0"/>
+                                <tbody>
+                                    <tr t-foreach="o.get_payments()" t-as="l">
+                                        <td class="text-left">
+                                            <span t-esc="l.get('pay_method')"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="l.get('amount')"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                        <t t-set="payment_total" t-value="payment_total + l.get('amount')"/>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" style="border-bottom:1px solid;"/>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Total</td>
+                                        <td class="text-right">
+                                            <span t-esc="payment_total"
+                                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <br/>
+                            <br/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

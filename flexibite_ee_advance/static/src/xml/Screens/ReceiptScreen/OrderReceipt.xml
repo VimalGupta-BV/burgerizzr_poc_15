@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="OrderReceiptInh" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="inside">
+            <t t-if="env.pos.config.is_ordernote_receipt and receipt.order_note">
+                <br/>
+                <div style='text-align:left'>
+                    <span><b>Note:</b>
+                    <t t-esc="receipt.order_note"/></span>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('before-footer')]" position="inside">
+            <t t-if="env.pos.get_order().get_sign()">
+                <div class="pos-receipt">
+                    <br/>
+                    <div style='text-align:right'>
+                        <img style="height: 80px;width:133px;"
+                             t-att-src="'data:image/gif;base64,'+ env.pos.get_order().get_sign()"/>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('before-footer')]" position="inside">
+            
+            <t t-if="props.order.get_client() and props.order.get_change_amount_for_wallet()">
+                <div class="pos-receipt">
+                    <div>----------------------------------------------------</div>
+                    <div class="pos-center-align">Wallet</div>
+                    <div>----------------------------------------------------</div>
+                    <t t-if="props.order.get_change_amount_for_wallet() &gt; 0 and props.order.get_client()">
+                        <div>
+                            Credit Amount:
+                            <span class="pos-receipt-right-align">
+                                <t t-esc="props.order.get_change_amount_for_wallet()"/>
+                            </span>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </t>
+
+    <t t-name="OrderLinesReceipt" t-inherit="point_of_sale.OrderLinesReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-foreach='receipt.orderlines']" position="inside">
+            <t t-if="env.pos.config.is_productnote_receipt and line.line_note">
+                 <t t-esc="line.line_note"/>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

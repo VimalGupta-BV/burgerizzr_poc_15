@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PurchaseOrderCreate" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <Draggable>
+                <div class="popup create-purchase-order">
+                    <header class="title drag-handle">
+                        <t t-esc="props.title"/>
+                    </header>
+                    <div class="">
+                        <t t-if='props.CreatedPurchaseOrder == "False"'>
+                            <t t-if='props.SelectedProductList.length > 0'>
+                                <div class="supplier-flex">
+                                    <div class="supplier-label">Supplier</div>
+                                    <div class="supplier-text">
+                                        <input type="text" t-model="state.CustomerName" t-ref="partner_id"
+                                               placeholder="Select Supplier" id="partner_id" name="partner_id"
+                                               style=""
+                                               class="search-supplier"
+                                               t-on-keyup="searchForPartner"
+                                               t-att-class="{ blank_validation_input: state.CustomerNameBlank }"/>
+                                    </div>
+                                </div>
+                                <div class="product-header-info1">
+                                    <div class="item-1">Product</div>
+                                    <div class="item-2">Qty.</div>
+                                    <div class="item-2"> </div>
+                                </div>
+                                <div class="purchase-product-container">
+                                    <div class="product-info1" t-foreach="props.SelectedProductList" t-as="product_id" t-key="product_id">
+                                        <div class="item-1"><t t-esc='product_id.display_name'/></div>
+                                        <div class="item-2">
+                                            <input type="text" t-att-model="state.ProductQty"
+                                                                       t-att-ref="product_id.id" t-att-id="product_id.id" value="1"
+                                                                       t-on-keydown="onInputKeyDownNumberVlidation"/>
+                                        </div>
+                                        <div class="item-2">
+                                            <i class="fa fa-trash" title="Delete" t-on-click="DeletePurchaseLine(product_id)"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <t t-if='props.CreatedPurchaseOrder == "True"'>
+                                    <p><t t-esc="props.defination"/>:
+                                        <a target="blank" t-att-href="props.url" style="color:#6ec89b">
+                                            <t t-esc="props.order_name"/>
+                                        </a>
+                                    </p>
+                                </t>
+                            </t>
+                            <t t-if='props.SelectedProductList.length &lt;= 0'>
+                                <p style="font-size:15px;">Please Select Product for Create Purchase Order !</p>
+                            </t>
+                        </t>
+                    </div>
+                    <t t-if='props.CreatedPurchaseOrder == "True"'>
+                        <p><t t-esc="props.defination"/>:
+                            <a target="blank" t-att-href="props.url" style="color:#6ec89b">
+                                <t t-esc="props.order_name"/>
+                            </a>
+                        </p>
+                    </t>
+
+                    <footer class="footer">
+                        <div class="envelope-footer">
+                            <div style="display:flex">
+                                <div>
+                                    <label class="switch">
+                                        <input type="checkbox" t-model="state.SendMail" t-ref="SendMail"
+                                               id="SendMail"/>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="envelope-item">
+                                    <i class="fa fa-envelope"/> supplier
+                                </div>
+                                <div t-if='props.CreatedInternalTransfer == "True"' t-on-click="print">
+                                    <span class="button" t-esc="props.printText"/>
+                                </div>
+                            </div>
+                            <div style="display:flex">
+                                <div class="button confirm" t-if='props.SelectedProductList.length > 0' t-on-click="confirm">
+                                    <t t-esc="props.confirmText"/>
+                                </div>
+                                <div class="button cancel" t-on-click="cancel">
+                                    <t t-esc="props.cancelText"/>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </Draggable>
+        </div>
+    </t>
+
+</templates>

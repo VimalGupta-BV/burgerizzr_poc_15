@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="AsplRetReceiptScreenInh" t-inherit="point_of_sale.ReceiptScreen" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('top-content-center')]" position="replace">
+            <t t-if="props.check == 'from-packLot-screen'">
+                <div class="top-content-center">
+                    <h1 t-if="!env.isMobile">
+                    </h1>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="top-content-center">
+                    <h1 t-if="!env.isMobile">
+                        <t t-esc="orderAmountPlusTip"/>
+                    </h1>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('next')]" position="replace">
+            <t t-if="props.check == 'from_warehouse'">
+                <div class="button next" t-att-class="{ highlight: !locked }"
+                     t-on-click="clickBack">
+                    <i class="fa fa-angle-double-left"/>
+                    Back
+                </div>
+            </t>
+            <t t-else="">
+                <div class="button next" t-att-class="{ highlight: !locked }"
+                     t-on-click="orderDone">
+                        New Order <i class="fa fa-angle-double-right"/>
+                </div>
+            </t>
+        </xpath>
+    </t>
+
+    <t t-name="OrderLinesReceipt" t-inherit="point_of_sale.OrderLinesReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-if='isSimple(line)']//WrappedProductNameLines" position="before">
+            <div style="font-size: 75%; padding-left: 10px;">
+                <t t-foreach="line.combolines" t-as="comboline">
+                    <div>
+                        <t t-if="comboline.is_replaced == true">
+                            <span style="font-weight: bold;">REPLACE: </span>
+                            <t t-esc="comboline.product_name"/>
+                            <span> </span>
+                            <span> with <br/>
+                                <t t-esc="comboline.product_name_wrapped[0]"/>
+                            </span>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="comboline.product_name_wrapped[0]"/>
+                        </t>
+                        <span t-if="comboline.price_display != 0">
+                              -  <t t-esc="env.pos.format_currency_no_symbol(comboline.price_display)"
+                                    class="price_display pos-receipt-combo-price-align"/>
+                        </span>
+                    </div>
+                    <WrappedProductNameLines line="comboline"/>
+                </t>
+            </div>
+        </xpath>
+    </t>
+
+</templates>
