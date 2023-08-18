@@ -15,15 +15,8 @@
             <button class="button send-to-kitchen"
                     t-on-click="trigger('click-send-to-kitchen')" t-att-disabled="!isKitchenButton">
                 <t t-if="!env.isMobile"><i class="fa fa-bell" role="img" aria-label="Send to Kitchen" title="Send order to kitchen" /></t>
-                Send to Kitchen 
+                Send to Kitchen
             </button>
-
-           <!--  <button class="button click-extra-recipe"
-                    t-on-click="trigger('click-extra-recipe')" >
-               <i class="fa fa-bell" role="img" aria-label="Extra Recipe" title="Extra Recipe" />
-               Extra Recipe
-            </button> -->
-            
         </xpath>
     </t>
 </templates>

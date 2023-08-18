@@ -28,6 +28,7 @@ class MrpProduction(models.Model):
 
     def create_mrp_from_pos(self, products):
         product_ids = []
+        print("productsproductsproductsproducts",products)
         if products:
             for product in products:
                 flag = 1
@@ -39,9 +40,15 @@ class MrpProduction(models.Model):
                 if flag:
                     product_ids.append(product)
             for prod in product_ids:
+                print("prodprodprodprod",prod)
+                order_line=self.env['pos.order.line'].search([('order_id.name','=',prod['pos_reference']),('is_combo_line','=',True),])
+                print("9999999999999999999",order_line)
+
+               
                 if prod['qty'] > 0:
                     product = self.env['product.product'].search(
                         [('id', '=', prod['id'])])
+                    #print("7777777777777",product.is_combo_line)
                     bom_count = self.env['mrp.bom'].search(
                         [('product_tmpl_id', '=', prod['product_tmpl_id'])])
                     if bom_count:
@@ -104,6 +111,7 @@ class MrpProduction(models.Model):
                                               'move_finished_ids': [
                                                   (0, 0, finished_vals)]
                                               })
+        #hhhh
         return True
 
 

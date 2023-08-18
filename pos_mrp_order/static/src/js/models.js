@@ -22,6 +22,7 @@ var rpc = require('web.rpc');
             createMRP(){
                 const order = this.currentOrder;
             var order_line = order.orderlines.models;
+            console.log("order_lineorder_line",order_line);
             var due = order.get_due();
              for (var i in order_line)
               {
@@ -32,6 +33,7 @@ var rpc = require('web.rpc');
                    {
                      var product_dict = {
                         'id': order_line[i].product.id,
+                        'order_line_id':order_line[i].id,
                         'qty': order_line[i].quantity,
                         'product_tmpl_id': order_line[i].product.product_tmpl_id,
                         'pos_reference': order.name,

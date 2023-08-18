@@ -38,7 +38,6 @@ odoo.define('flexibite_ee_advance.ProductScreen', function(require) {
                 useListener('open-purchase-history-popup', this.OpenPurchaseHistoryPopup);
                 useListener('show-order-return-screen', this.ShowOrderReturnScreen);
                 useListener('show-order-note-popup', this.ShowOrderNotePopup);
-                useListener('click-extra-recipe', this.exShowOrderNotePopup);
                 useListener('show-order-sync', this.ShowOrderSync);
                 useListener('add-delivery-charge', this.AddDeliveryCharge);
                 useListener('open-control-button', this._toggleControlButton);
@@ -130,90 +129,10 @@ odoo.define('flexibite_ee_advance.ProductScreen', function(require) {
             async ShowOrderSync(){
                 this.showScreen('OrderScreen');
             }
-
-            async exShowOrderNotePopup(event){
-                console.log("event",event, this.env.pos.product_id);
-                var selectedOrder = this.env.pos.get_order();
-                var order_line = selectedOrder.get_orderlines();
-                var combo_ids = [];
-                console.log("Order line currenrt",order_line, order_line['combolines'] );
-                _.each(order_line,function(item) {
-                    console.log('itemitemitem',item.combolines);
-                    for (const line of item.combolines){
-                        combo_ids.push({
-                                    'product_id': line.categoryName,
-                                    'quantity':line.quantity
-                                    
-                                });
-
-
-                    }
-                    /*var bom_id = {
-                            model: 'pos.order.line',
-                            method: 'assign_bom',
-                            args: [item.product.id]
-                        }*/
-
-                    /*let bom_model = _.find(this.models, (model) => model.model === 'mrp.bom');
-                    var domain = [['product_id','in', item.product.id]];
-
-                    var bom =this.rpc({
-                        model: 'mrp.bom',
-                        method: 'search_read',
-                        kwargs: {
-                            'domain': domain,
-                            'fields': bom_model.fields,                        
-                            'limit': 1
-                        }
-
-                    console.log("bom_id",bom)*/
-                    //console.log('itemitemitem',item.product.bom_id);
-
-                });
-                /*console.log('66666666666',product_id);
-                var extrarecipe = [];
-                var como=[]
-                const combo_ids = [];
-                _.each(order_line,function(item) {
-                        console.log('itemitemitem',item.product.product_tmpl_id.id, item.product.product_combo_ids);
-                       
-                            if(item.product.product_combo_ids){
-                                for(const line of item.product.product_combo_ids){
-                                    combo_ids.push(line.pos_category_id);
-                                }
-
-                                como.push(item.product.product_combo_ids)
-
-                            
-                        }
-                _.each(como,function(com){
-
-                    console.log('%%%%%%%%%%%',com.display_name, combo_ids);
-                });
-
-                       
-                        
-                    });
-                console.log("Extra3333333333333",extrarecipe, combo_ids);*/
-
-                console.log('combo_ids',combo_ids)
-                const { confirmedm, payload: inputNote} = await this.showPopup('ExtraRecipePopup', {
-                    
-                    title: this.env._t('Extra Recipe'),
-                    body: combo_ids,
-
-
-                });
-
-            }
-
-
             async ShowOrderNotePopup(){
-
                 const { confirmed, payload: inputNote } = await this.showPopup('ProductNotePopup', {
                     startingValue: this.env.pos.get_order().get_order_note(),
                     title: this.env._t('Order Note'),
-                   
                 });
 
                 if (confirmed) {
@@ -221,7 +140,6 @@ odoo.define('flexibite_ee_advance.ProductScreen', function(require) {
                     this.env.pos.get_order().set_order_note(inputNote);
                     if(this.env.pos.config.customer_display){
                         order.mirror_image_data();
-
                     }
                 }
             }

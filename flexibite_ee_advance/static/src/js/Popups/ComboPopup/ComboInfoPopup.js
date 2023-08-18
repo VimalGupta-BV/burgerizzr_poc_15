@@ -28,5 +28,3 @@ odoo.define('flexibite_ee_advance.ComboInfoPopup', function (require) {
 
     return ComboInfoPopup;
 });
-
-

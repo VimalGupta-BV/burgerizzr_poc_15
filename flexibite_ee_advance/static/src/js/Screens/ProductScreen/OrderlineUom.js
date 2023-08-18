@@ -96,12 +96,9 @@ odoo.define('flexibite_ee_advance.Orderline', function(require) {
             }
             async clickOpenNoteText() {
                 if (!this.selectedOrderline) return;
-                var order = this.env.pos.get_order();
-                var order_line = order.get_orderlines();
                 const { confirmed, payload: inputNote } = await this.showPopup('TextAreaPopup', {
                     startingValue: this.selectedOrderline.get_note(),
                     title: this.env._t('Add Internal Note'),
-                     body:order_line
                 });
                 if (confirmed) {
                     this.selectedOrderline.set_note(inputNote);

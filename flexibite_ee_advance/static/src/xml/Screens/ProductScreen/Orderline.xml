@@ -32,18 +32,6 @@
                         Add Product Note
                     </t>
                 </t>
-
-            </li>
-
-            <li class="info orderline-note" t-on-click="trigger('click-extra-recipe')">
-                <i class="fa fa-tag" role="img" aria-label="Note" title="Note"/>
-                
-                <t t-if="props.line.selected and env.pos.config.enable_order_note and env.pos.config.enable_product_note">
-                    <t t-if="!selectedOrderline.get_note()">
-                        Add Extra Recipe
-                    </t>
-                </t>
-                
             </li>
         </xpath>
         <xpath expr="//ul[@class='info-list']" position="after">

@@ -129,7 +129,6 @@
         ],
         'web.assets_qweb': [
             'flexibite_ee_advance/static/src/xml/**/*',
-           
         ],
     },
     'license': 'LGPL-3',

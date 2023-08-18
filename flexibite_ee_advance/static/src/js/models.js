@@ -27,7 +27,7 @@ odoo.define('flexibite_ee_advance.models', function (require) {
     models.load_fields("product.product", ['is_packaging', 'type', 'qty_available', 'is_combo','product_combo_ids']);
     models.load_fields('pos.session',['is_lock_screen']);
     models.load_fields('pos.order',['note']);
-    models.load_fields('pos.order.line',['line_note','bom_id']);
+    models.load_fields('pos.order.line',['line_note']);
 
     var _super_paymentline = models.Paymentline.prototype;
     var _super_Order = models.Order.prototype;
@@ -204,7 +204,6 @@ odoo.define('flexibite_ee_advance.models', function (require) {
 
     /*SALE ORDER LINE MODEL CUSTOM CODE END*/
     var SuperOrderLine = models.Orderline.prototype;
-
     models.Orderline = models.Orderline.extend({
         initialize: function(attr,options){
             SuperOrderLine.initialize.call(this, attr, options);
@@ -215,7 +214,6 @@ odoo.define('flexibite_ee_advance.models', function (require) {
             this.server_id = this.server_id || false;
             this.line_cid = this.cid || false;
             this.is_in_kitchen = this.is_in_kitchen || false;
-            this.bom_id = this.bom_id || false;
             this.quantityLine = {};
             this.useQuantityLine = {};
             this.combolines = this.combolines || [];
@@ -227,7 +225,6 @@ odoo.define('flexibite_ee_advance.models', function (require) {
             orderLine.server_id = this.server_id;
             orderLine.line_cid = this.line_cid;
             orderLine.is_in_kitchen = this.is_in_kitchen;
-            orderLine.bom_id=this.bom_id;
             orderLine.useQuantityLine = this.useQuantityLine;
             orderLine.quantityLine = this.quantityLine;
             return orderLine;
@@ -263,7 +260,6 @@ odoo.define('flexibite_ee_advance.models', function (require) {
             this.uom_id = json.uom_id;
             this.serials = json.serials;
             this.note = json.note;
-            this.bom_id=json.bom_id;
             /*KITCHEN SCREEN CODE START STAT*/
             this.server_id = json.server_id;
             this.line_cid = json.line_cid;
@@ -273,7 +269,6 @@ odoo.define('flexibite_ee_advance.models', function (require) {
             var json = SuperOrderLine.export_as_JSON.call(this);
             json.uom_id = this.uom_id;
             json.unit_id = this.uom_id;
-            json.bom_id=this.bom_id;
             json.serials = this.serials;
             json.note = this.get_product_note();
             json.order_return_qty = this.get_quantity();
@@ -614,8 +609,6 @@ odoo.define('flexibite_ee_advance.models', function (require) {
         set_delivery_service: function(delivery_service){
             this.delivery_service = delivery_service;
         },
-
-        
         get_delivery_service: function(){
             return this.delivery_service;
         },

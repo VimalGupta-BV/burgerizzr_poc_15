@@ -68,6 +68,3 @@ odoo.define('flexibite_ee_advance.ActionpadWidget', function(require) {
 
     return ActionpadWidget;
 });
-
-
-

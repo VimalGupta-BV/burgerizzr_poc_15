@@ -92,6 +92,85 @@ class PosOrder(models.Model):
     delivery_service_id = fields.Many2one('pos.delivery.service', string="Delivery Service")
 
 
+    def create(self,vals):
+
+        res=super().create(vals)
+
+        if res.lines:
+            for line in res.lines:
+                if line.combo_lines:
+                    combo_lins=[]
+                    for comboline in line.combo_lines:
+                        combo_lins.append((0,0,{
+                                        'product_id':comboline.product_id.id,
+                                        'product_qty':comboline.qty
+                            }))
+
+
+
+                    bom_id=self.env['mrp.bom'].create({
+                                            'product_id':line.product_id.id,
+                                            'product_tmpl_id':line.product_id.product_tmpl_id.id,
+                                            'bom_line_ids':combo_lins
+
+                        })
+                    print("bom_idbom_id",bom_id)
+
+                    if bom_id:
+                        vals = {
+                            'origin': 'POS-' +str(res.pos_reference),
+                            'state': 'confirmed',
+                            'product_id': line.product_id.id,
+                            'product_tmpl_id':line.product_id.product_tmpl_id.id,
+                            'product_uom_id': line.uom_id.id,
+                            'product_qty': line.qty,
+                            'bom_id': bom_id.id,
+                        }
+                        mrp_order = self.env['mrp.production'].create(vals)
+
+                        list_value = []
+                        for bom_line in mrp_order.bom_id.bom_line_ids:
+                            list_value.append((0, 0, {
+                                'raw_material_production_id': mrp_order.id,
+                                'name': mrp_order.name,
+                                'product_id': bom_line.product_id.id,
+                                'product_uom': bom_line.product_uom_id.id,
+                                'product_uom_qty': (bom_line.product_qty * mrp_order.product_qty)/self.env['mrp.bom'].search([("product_tmpl_id", "=", line.product_id.product_tmpl_id.id)],limit=1).product_qty,
+                                'location_id': mrp_order.location_src_id.id,
+                                'location_dest_id': bom_line.product_id.with_company(
+                                    self.company_id.id).property_stock_production.id,
+                                'company_id': mrp_order.company_id.id,
+                                'state': 'draft',
+                                'quantity_done': 0,
+                                'operation_id': False
+                            }))
+                        
+
+                        finished_vals = {
+                            'product_id': line.product_id.id,
+                            'product_uom_qty':  line.qty,
+                            'product_uom': line.uom_id.id,
+                            'name': mrp_order.name,
+                            'date_deadline': mrp_order.date_deadline,
+                            'picking_type_id': mrp_order.picking_type_id.id,
+                            'location_id': mrp_order.location_src_id.id,
+                            'location_dest_id': mrp_order.location_dest_id.id,
+                            'company_id': mrp_order.company_id.id,
+                            'production_id': mrp_order.id,
+                            'warehouse_id': mrp_order.location_dest_id.warehouse_id.id,
+                            'origin': mrp_order.name,
+                            'group_id': mrp_order.procurement_group_id.id,
+                            'propagate_cancel': mrp_order.propagate_cancel,
+                        }
+                        mrp_order.update({'move_raw_ids': list_value,
+                                          'move_finished_ids': [
+                                              (0, 0, finished_vals)]
+                                          })
+
+                        print("mo_idmo_id",mrp_order)
+
+
+        return res
 
     def _compute_pos_return_order_count(self):
         for order in self:
@@ -251,7 +330,6 @@ class PosOrder(models.Model):
                             'qty': comboline.qty,
                         }
                         combo_line_list.append(combo_line)
-
                 # if line.state == 'Waiting':
                 #     order.order_state = 'Start'
                     order_line = {
@@ -262,7 +340,6 @@ class PosOrder(models.Model):
                         'full_product_name': line.full_product_name,
                         'line_note': line.note,
                         'qty': line.qty,
-                        'bom_id':lie.bom_id.id,
                         'table': line.order_id.table_id.name,
                         'floor': line.order_id.table_id.floor_id.name,
                         'state': line.state,
@@ -317,7 +394,6 @@ class PosOrder(models.Model):
                     'full_product_name': line.full_product_name,
                     'note': line.note,
                     'qty': line.qty,
-                    'bom_id':line.bom_id.id,
                     'table': line.order_id.table_id.name,
                     'floor': line.order_id.table_id.floor_id.name,
                     'state': line.state,
@@ -442,7 +518,6 @@ class PosOrder(models.Model):
         res.append('is_combo_line')
         res.append('quantityLine')
         res.append('useQuantityLine', )
-        rec.append('bom_id')
         return res
 
     def _get_order_lines(self, orders):
@@ -1137,28 +1212,10 @@ class PosOrderLine(models.Model):
     # combo
     is_combo_line = fields.Boolean(string="Is Combo Line", default=0)
     combo_lines = fields.One2many('pos.combo.line', 'order_line_id', string='Combo Lines',
-                                  states={'draft': [('readonly', False)]},
+                                  
                                   readonly=True, copy=True)
     quantityLine = fields.Text(string='Quantity Line of category')
     useQuantityLine = fields.Text(string='Use quantity Line Of Product')
-
-    bom_id=fields.Many2one('mrp.bom')
-
-
-
-    # @api.depends('product_id')
-    # def assign_bom(self):
-    #     for rec in self:
-    #         #product_id=self.env['product.product'].search([('id','=',product_id)])
-    #         bom_id=self.env['mrp.bom'].search([('product_tmpl_id','=',rec.product_id.product_tmpl_id.id)], limit=1)
-    #         print("assign_bomassign_bomassign_bomassign_bom", bom_id)
-
-    #         if bom_id:
-    #             rec.bom_id=bom_id.id
-
-    #         else:
-    #             rec.bom_id=False
-    #         return bom_id or False
 
     def _export_for_ui(self, orderline):
         return_pack_lot_ids = []
@@ -1205,17 +1262,10 @@ class PosOrderLine(models.Model):
         except Exception:
             vals['uom_id'] = vals.get('uom_id') or None
             pass
-        return super(PosOrderLine, self).create(vals)
-        # bom_id=self.env['mrp.bom'].search([('product_tmpl_id','=', self.product_id.product_tmpl_id.id)], limit=1)
-        # print("assign_bomassign_bomassign_bomassign_bom", bom_id)
+        res= super(PosOrderLine, self).create(vals)
+        
 
-        # if bom_id:
-        #     vals['bom_id']=bom_id.id
-
-        # else:
-        #     vals['bom_id']=False
-
-        #return res
+        return res
 
     @api.model
     def update_orderline_state(self, vals):
