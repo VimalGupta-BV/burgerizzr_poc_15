@@ -351,7 +351,7 @@ class PosOrder(models.Model):
                         'categ_id': line.product_id.product_tmpl_id.pos_categ_id.id,
                         'order_name': line.order_id.name,
                         'user': line.create_uid.id,
-                        'route_id': line.product_id.product_tmpl_id.route_ids[0].active,
+                        'route_id': line.product_id.product_tmpl_id.route_ids.active,
                     }
                     order_line_list.append(order_line)
             order_dict = {
@@ -405,7 +405,7 @@ class PosOrder(models.Model):
                     'categ_id': line.product_id.product_tmpl_id.pos_categ_id.id,
                     'order_name': line.order_id.name,
                     'user': line.create_uid.id,
-                    'route_id': line.product_id.product_tmpl_id.route_ids[0].active,
+                    'route_id': line.product_id.product_tmpl_id.route_ids.active,
                     'combolines': combo_line_list,
                 }
                 order_line_list.append(order_line)
