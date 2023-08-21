@@ -103,7 +103,8 @@ class PosOrder(models.Model):
                     for comboline in line.combo_lines:
                         combo_lins.append((0,0,{
                                         'product_id':comboline.product_id.id,
-                                        'product_qty':comboline.qty
+                                        'product_qty':comboline.qty,
+                                        'product_uom_id':comboline.product_id.uom_id.id
                             }))
 
 
@@ -111,7 +112,8 @@ class PosOrder(models.Model):
                     bom_id=self.env['mrp.bom'].create({
                                             'product_id':line.product_id.id,
                                             'product_tmpl_id':line.product_id.product_tmpl_id.id,
-                                            'bom_line_ids':combo_lins
+                                            'bom_line_ids':combo_lins,
+                                            'type':'phantom'
 
                         })
                     print("bom_idbom_id",bom_id)
@@ -122,7 +124,7 @@ class PosOrder(models.Model):
                             'state': 'confirmed',
                             'product_id': line.product_id.id,
                             'product_tmpl_id':line.product_id.product_tmpl_id.id,
-                            'product_uom_id': line.uom_id.id,
+                            'product_uom_id': line.product_id.uom_id.id,
                             'product_qty': line.qty,
                             'bom_id': bom_id.id,
                         }
@@ -134,7 +136,7 @@ class PosOrder(models.Model):
                                 'raw_material_production_id': mrp_order.id,
                                 'name': mrp_order.name,
                                 'product_id': bom_line.product_id.id,
-                                'product_uom': bom_line.product_uom_id.id,
+                                'product_uom': bom_line.product_id.uom_id.id,
                                 'product_uom_qty': (bom_line.product_qty * mrp_order.product_qty)/self.env['mrp.bom'].search([("product_tmpl_id", "=", line.product_id.product_tmpl_id.id)],limit=1).product_qty,
                                 'location_id': mrp_order.location_src_id.id,
                                 'location_dest_id': bom_line.product_id.with_company(
@@ -149,7 +151,7 @@ class PosOrder(models.Model):
                         finished_vals = {
                             'product_id': line.product_id.id,
                             'product_uom_qty':  line.qty,
-                            'product_uom': line.uom_id.id,
+                            'product_uom': line.product_id.uom_id.id,
                             'name': mrp_order.name,
                             'date_deadline': mrp_order.date_deadline,
                             'picking_type_id': mrp_order.picking_type_id.id,
@@ -162,12 +164,15 @@ class PosOrder(models.Model):
                             'group_id': mrp_order.procurement_group_id.id,
                             'propagate_cancel': mrp_order.propagate_cancel,
                         }
+
+
                         mrp_order.update({'move_raw_ids': list_value,
                                           'move_finished_ids': [
                                               (0, 0, finished_vals)]
                                           })
 
-                        print("mo_idmo_id",mrp_order)
+                        print("mo_idmo_id",mrp_order, list_value)
+                        print("finished_vals", finished_vals)
 
 
         return res
@@ -346,7 +351,7 @@ class PosOrder(models.Model):
                         'categ_id': line.product_id.product_tmpl_id.pos_categ_id.id,
                         'order_name': line.order_id.name,
                         'user': line.create_uid.id,
-                        'route_id': line.product_id.product_tmpl_id.route_ids.active,
+                        'route_id': line.product_id.product_tmpl_id.route_ids[0].active,
                     }
                     order_line_list.append(order_line)
             order_dict = {
@@ -400,7 +405,7 @@ class PosOrder(models.Model):
                     'categ_id': line.product_id.product_tmpl_id.pos_categ_id.id,
                     'order_name': line.order_id.name,
                     'user': line.create_uid.id,
-                    'route_id': line.product_id.product_tmpl_id.route_ids.active,
+                    'route_id': line.product_id.product_tmpl_id.route_ids[0].active,
                     'combolines': combo_line_list,
                 }
                 order_line_list.append(order_line)
