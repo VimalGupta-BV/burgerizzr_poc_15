@@ -1,6 +1,6 @@
 <odoo>
     <data>
-    	<record model="ir.ui.view" id="bv_mrp_production_form_view">
+    	<!-- <record model="ir.ui.view" id="bv_mrp_production_form_view">
           <field name="name">bv.mrp.production.form.view</field>
           <field name="model">mrp.production</field>
           <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
@@ -14,6 +14,6 @@
             </field>
             
           </field>
-      </record>
+      </record> -->
     </data>
 </odoo>

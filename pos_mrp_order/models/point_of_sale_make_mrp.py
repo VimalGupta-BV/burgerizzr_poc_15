@@ -28,7 +28,6 @@ class MrpProduction(models.Model):
 
     def create_mrp_from_pos(self, products):
         product_ids = []
-        print("productsproductsproductsproducts",products)
         if products:
             for product in products:
                 flag = 1
@@ -40,15 +39,9 @@ class MrpProduction(models.Model):
                 if flag:
                     product_ids.append(product)
             for prod in product_ids:
-                print("prodprodprodprod",prod)
-                order_line=self.env['pos.order.line'].search([('order_id.name','=',prod['pos_reference']),('is_combo_line','=',True),])
-                print("9999999999999999999",order_line)
-
-               
                 if prod['qty'] > 0:
                     product = self.env['product.product'].search(
                         [('id', '=', prod['id'])])
-                    #print("7777777777777",product.is_combo_line)
                     bom_count = self.env['mrp.bom'].search(
                         [('product_tmpl_id', '=', prod['product_tmpl_id'])])
                     if bom_count:
@@ -81,13 +74,13 @@ class MrpProduction(models.Model):
                                     'name': mrp_order.name,
                                     'product_id': bom_line.product_id.id,
                                     'product_uom': bom_line.product_uom_id.id,
-                                    'product_uom_qty': (bom_line.product_qty * mrp_order.product_qty)/self.env['mrp.bom'].search([("product_tmpl_id", "=", prod['product_tmpl_id'])],limit=1).product_qty,
+                                    'product_uom_qty': (bom_line.product_qty * mrp_order.product_qty)/self.env['mrp.bom'].search([("product_tmpl_id", "=", prod['product_tmpl_id'])]).product_qty,
                                     'location_id': mrp_order.location_src_id.id,
                                     'location_dest_id': bom_line.product_id.with_company(
                                         self.company_id.id).property_stock_production.id,
                                     'company_id': mrp_order.company_id.id,
-                                    'state': 'draft',
-                                    'quantity_done': 0,
+                                    'state': 'done',
+                                    'quantity_done': (bom_line.product_qty * mrp_order.product_qty)/self.env['mrp.bom'].search([("product_tmpl_id", "=", prod['product_tmpl_id'])]).product_qty,
                                     'operation_id': False
                                 }))
 
@@ -111,7 +104,7 @@ class MrpProduction(models.Model):
                                               'move_finished_ids': [
                                                   (0, 0, finished_vals)]
                                               })
-        #hhhh
+                            mrp_order.state='done'
         return True
 
 

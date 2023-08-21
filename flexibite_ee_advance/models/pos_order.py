@@ -142,8 +142,8 @@ class PosOrder(models.Model):
                                 'location_dest_id': bom_line.product_id.with_company(
                                     self.company_id.id).property_stock_production.id,
                                 'company_id': mrp_order.company_id.id,
-                                'state': 'draft',
-                                'quantity_done': 0,
+                                'state': 'done',
+                                'quantity_done': (bom_line.product_qty * mrp_order.product_qty)/self.env['mrp.bom'].search([("product_tmpl_id", "=", line.product_id.product_tmpl_id.id)],limit=1).product_qty,
                                 'operation_id': False
                             }))
                         
@@ -171,8 +171,10 @@ class PosOrder(models.Model):
                                               (0, 0, finished_vals)]
                                           })
 
-                        print("mo_idmo_id",mrp_order, list_value)
+                        mrp_order.state='done'
+                        print("mo_idmo_id",mrp_order, list_value, mrp_order.state)
                         print("finished_vals", finished_vals)
+
 
 
         return res

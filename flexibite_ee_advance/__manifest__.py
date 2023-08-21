@@ -17,7 +17,7 @@
     'author': 'Acespritech Solutions Pvt. Ltd.',
     'website': "http://www.acespritech.com",
     'version': '1.0.0',
-    'depends': ['base', 'point_of_sale', 'purchase', 'pos_hr', 'bus', 'product_expiry', 'hr_attendance','pos_restaurant', 'account'],
+    'depends': ['base', 'point_of_sale', 'purchase', 'pos_hr', 'bus', 'product_expiry', 'hr_attendance','pos_restaurant', 'account', 'mrp'],
     'price': 1100.00,
     'currency': 'EUR',
     'images': [

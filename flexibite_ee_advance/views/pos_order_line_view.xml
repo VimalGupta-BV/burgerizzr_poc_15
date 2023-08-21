@@ -19,10 +19,6 @@
                 <xpath expr="//field[@name='lines']/tree/field[@name='qty']" position="after">
                     <field name="uom_id"/>
                 </xpath>
-                 <xpath expr="//field[@name='lines']/form/group" position="inside">
-                    <field name="is_combo_line"/>
-                    <field name="combo_lines"/>
-                </xpath>
                 <xpath expr="//field[@name='lines']//tree//field[@name='product_uom_id']" position="attributes">
                     <field name="product_uom_id" position="attributes">
                         <attribute name="invisible">1</attribute>
